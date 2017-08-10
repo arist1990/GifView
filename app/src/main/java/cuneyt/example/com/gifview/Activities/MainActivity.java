@@ -1,5 +1,6 @@
 package cuneyt.example.com.gifview.Activities;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -63,8 +65,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (gifView.isPlaying())
-                    gifView.pause();
+//                gifView.setProgress(0.5f);
+
+                ValueAnimator valueAnimator = ValueAnimator.ofFloat(0f, 1.0f);
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        gifView.setProgress((Float) animation.getAnimatedValue());
+                    }
+                });
+                valueAnimator.setRepeatMode(ValueAnimator.RESTART);
+                valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+                valueAnimator.setDuration(930);
+                valueAnimator.setInterpolator(new LinearInterpolator());
+                valueAnimator.start();
+
+//                if (gifView.isPlaying())
+//                    gifView.pause();
             }
         });
         playButton.setOnClickListener(new OnClickListener() {

@@ -11,6 +11,7 @@ import android.view.View;
 
 /**
  * Created by Cuneyt on 4.10.2015.
+ * 1.2 新增按progress做跳转
  * Gifview
  */
 public class GifView extends View {
@@ -249,6 +250,30 @@ public class GifView extends View {
         canvas.scale(mScale, mScale);
         movie.draw(canvas, mLeft / mScale, mTop / mScale);
         canvas.restore();
+    }
+
+    public boolean setProgress(float progress){
+        if (progress < 0f || progress > 1.0f) {
+            return false;
+        }
+
+        long now = android.os.SystemClock.uptimeMillis();
+
+        if (mMovieStart == 0) {
+            mMovieStart = now;
+        }
+
+        int dur = movie.duration();
+
+        if (dur == 0) {
+            dur = DEFAULT_MOVIE_VIEW_DURATION;
+        }
+        mCurrentAnimationTime = (int)(progress * dur);
+
+        invalidateView();
+
+        return true;
+
     }
 
     @SuppressLint("NewApi")
